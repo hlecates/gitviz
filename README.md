@@ -51,11 +51,11 @@ gitviz --path /path/to/other/repo
 ## Example Outputs
 
 <p align="center">
-  <img src="docs/Example_Output.png" alt="GitViz Example Output" width="400"/>
+  <img src="docs/Example_Output.png" alt="GitViz Example Output" width="800"/>
 </p>
 
 <p align="center">
-  <img src="docs/Example_Node.png" alt="GitViz Node Label" width="400"/>
+  <img src="docs/Example_Node.png" alt="GitViz Node Label" width="800"/>
 </p>
 
 

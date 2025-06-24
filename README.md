@@ -4,9 +4,7 @@
   <img src="docs/GitViz-Logo.png" alt="GitViz Logo" width="400"/>
 </p>
 
-**GitViz** is a modern, lightweight Python CLI tool that transforms Git repository commit history into interactive visualizations. Built with simplicity in mind, GitViz generates dynamic, web-based graphs that make understanding Git workflows intuitive and visually appealing.
-
----
+**GitViz** is a modern, lightweight Python CLI tool that transforms Git repository commit history into interactive visualizations. GitViz generates dynamic, web-based graphs that make understanding Git workflows intuitive and visually appealing.
 
 ## Quick Start
 
@@ -14,19 +12,17 @@
 
 #### From PyPI (When Published)
 
-```bash
+````bash
 pip install gitviz
-```
+````
 
 #### From Source
 
-```bash
+````bash
 git clone https://github.com/yourusername/gitviz.git
 cd gitviz
 pip install -e .
-```
-
----
+````
 
 ## Basic Usage
 
@@ -52,8 +48,6 @@ gitviz --max-commits 50
 gitviz --path /path/to/other/repo
 ````
 
----
-
 ## Example Outputs
 
 <p align="center">
@@ -61,10 +55,9 @@ gitviz --path /path/to/other/repo
 </p>
 
 <p align="center">
-  <img src="docs/Example_Node_Label.png" alt="GitViz Node Label" width="400"/>
+  <img src="docs/Example_Node.png" alt="GitViz Node Label" width="400"/>
 </p>
 
----
 
 ## Future Work
 

@@ -132,7 +132,7 @@ def test_core_functionality(repo_path):
         print(f"✓ Available engines: {available_engines}")
         
         if not available_engines:
-            print("⚠ No rendering engines available - install graphviz or pyvis")
+            print("No rendering engines available - install pyvis")
             return False
         
         return True
@@ -159,13 +159,6 @@ def test_rendering_engines(repo_path, output_dir):
     # Test configurations
     test_configs = []
     
-    if "graphviz" in available_engines:
-        test_configs.extend([
-            ("graphviz", "svg", "graphviz_output"),
-            ("graphviz", "png", "graphviz_output"),
-            ("graphviz", "pdf", "graphviz_output"),
-            ("graphviz", "dot", "graphviz_output"),
-        ])
     
     if "pyvis" in available_engines:
         test_configs.append(("pyvis", "html", "pyvis_output"))

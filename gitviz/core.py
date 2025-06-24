@@ -1,7 +1,3 @@
-"""
-Core graph construction and rendering backends for Gitviz.
-"""
-
 import subprocess
 import os
 from typing import List, Dict, Tuple, Optional
@@ -11,7 +7,6 @@ from abc import ABC, abstractmethod
 
 @dataclass
 class GitCommit:
-    """Represents a Git commit with metadata."""
     sha: str
     short_sha: str
     message: str
@@ -21,82 +16,20 @@ class GitCommit:
 
 
 class RenderEngine(ABC):
-    """Abstract base class for rendering engines."""
-    
     @abstractmethod
     def render(self, commits: List[GitCommit], output_path: str, **kwargs) -> None:
-        """Render the commit graph to the specified output path."""
         pass
     
     @abstractmethod
     def supports_format(self, format_type: str) -> bool:
-        """Check if the engine supports the given output format."""
         pass
-
-
-class GraphvizEngine(RenderEngine):
-    """Graphviz rendering engine for static outputs."""
-    
-    def __init__(self):
-        self.available = self._check_graphviz_available()
-    
-    def _check_graphviz_available(self) -> bool:
-        """Check if Graphviz is available."""
-        try:
-            import graphviz
-            return True
-        except ImportError:
-            return False
-    
-    def supports_format(self, format_type: str) -> bool:
-        """Check if format is supported by Graphviz."""
-        return format_type.lower() in ['svg', 'png', 'pdf', 'dot']
-    
-    def render(self, commits: List[GitCommit], output_path: str, format_type: str = 'svg') -> None:
-        """Render using Graphviz."""
-        if not self.available:
-            raise RuntimeError("Graphviz is not available. Install with: pip install graphviz")
-        
-        import graphviz
-        
-        # Create directed graph
-        dot = graphviz.Digraph(comment='Git Repository Structure')
-        dot.attr(rankdir='TB', size='12,8', dpi='300')
-        dot.attr('node', shape='box', style='rounded,filled', fillcolor='lightblue')
-        dot.attr('edge', color='gray', arrowhead='vee')
-        
-        # Add nodes for each commit
-        for commit in commits:
-            label = f"{commit.short_sha}\\n{self._truncate_message(commit.message)}"
-            dot.node(commit.sha, label)
-        
-        # Add edges for parent-child relationships
-        for commit in commits:
-            for parent_sha in commit.parents:
-                # Only add edge if parent exists in our commit list
-                if any(c.sha == parent_sha for c in commits):
-                    dot.edge(parent_sha, commit.sha)
-        
-        # Render to file
-        base_name = output_path.rsplit('.', 1)[0] if '.' in output_path else output_path
-        dot.render(base_name, format=format_type, cleanup=True)
-        print(f"Graph rendered to {base_name}.{format_type}")
-    
-    def _truncate_message(self, message: str, max_length: int = 30) -> str:
-        """Truncate commit message for display."""
-        if len(message) <= max_length:
-            return message
-        return message[:max_length-3] + "..."
 
 
 class PyVisEngine(RenderEngine):
-    """PyVis rendering engine for interactive HTML output."""
-    
     def __init__(self):
         self.available = self._check_pyvis_available()
     
     def _check_pyvis_available(self) -> bool:
-        """Check if PyVis is available."""
         try:
             import pyvis
             return True
@@ -104,11 +37,9 @@ class PyVisEngine(RenderEngine):
             return False
     
     def supports_format(self, format_type: str) -> bool:
-        """PyVis only supports HTML format."""
         return format_type.lower() == 'html'
     
     def render(self, commits: List[GitCommit], output_path: str, **kwargs) -> None:
-        """Render using PyVis."""
         if not self.available:
             raise RuntimeError("PyVis is not available. Install with: pip install pyvis")
         
@@ -150,21 +81,17 @@ class PyVisEngine(RenderEngine):
         print(f"Interactive graph rendered to {output_path}")
     
     def _truncate_message(self, message: str, max_length: int = 25) -> str:
-        """Truncate commit message for display."""
         if len(message) <= max_length:
             return message
         return message[:max_length-3] + "..."
 
 
 class GitRepository:
-    """Handles Git repository operations."""
-    
     def __init__(self, repo_path: str = "."):
         self.repo_path = repo_path
         self._validate_git_repo()
     
     def _validate_git_repo(self) -> None:
-        """Validate that the path contains a Git repository."""
         try:
             subprocess.run(
                 ["git", "rev-parse", "--git-dir"],
@@ -177,7 +104,6 @@ class GitRepository:
             raise RuntimeError(f"Not a git repository: {self.repo_path}")
     
     def get_commits(self, max_commits: int = 100) -> List[GitCommit]:
-        """Retrieve commit history from the repository."""
         # Git log format: SHA|SHORT_SHA|MESSAGE|PARENTS|AUTHOR|DATE
         format_str = "%H|%h|%s|%P|%an|%ai"
         
@@ -215,28 +141,23 @@ class GitRepository:
 
 
 class GitViz:
-    """Main GitViz class that orchestrates graph generation."""
-    
     def __init__(self):
         self.engines = {
-            'graphviz': GraphvizEngine(),
             'pyvis': PyVisEngine()
         }
     
     def get_available_engines(self) -> List[str]:
-        """Get list of available rendering engines."""
         return [name for name, engine in self.engines.items() if engine.available]
     
     def visualize(self, 
                   repo_path: str = ".",
-                  engine: str = "auto",
+                  engine: str = "pyvis",
                   output_path: str = "git_graph",
                   format_type: str = "svg",
                   max_commits: int = 100) -> None:
-        """Generate visualization of Git repository."""
         
         # Auto-select engine if needed
-        if engine == "auto":
+        if engine == "pyvis":
             available = self.get_available_engines()
             if not available:
                 raise RuntimeError("No rendering engines available. Install graphviz or pyvis.")
@@ -244,8 +165,6 @@ class GitViz:
             # Prefer graphviz for static formats, pyvis for html
             if format_type.lower() == "html" and "pyvis" in available:
                 engine = "pyvis"
-            elif format_type.lower() in ["svg", "png", "pdf", "dot"] and "graphviz" in available:
-                engine = "graphviz"
             else:
                 engine = available[0]
         

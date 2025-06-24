@@ -1,7 +1,3 @@
-"""
-Console entry point and argument parsing for Gitviz.
-"""
-
 import argparse
 import sys
 import os
@@ -11,17 +7,9 @@ from .core import GitViz
 
 
 def create_parser() -> argparse.ArgumentParser:
-    """Create command line argument parser."""
     parser = argparse.ArgumentParser(
-        description="Visualize Git repository structure as a directed acyclic graph",
+        description="Visualize Git repository structure as a DAG",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  gitviz                                    # Default SVG output
-  gitviz --engine pyvis --output history   # Interactive HTML
-  gitviz --format png --output commits     # PNG image
-  gitviz --path /path/to/repo --max-commits 50  # Custom repo and limit
-        """
     )
     
     parser.add_argument(
@@ -32,16 +20,16 @@ Examples:
     
     parser.add_argument(
         "--engine",
-        choices=["auto", "graphviz", "pyvis"],
-        default="auto",
-        help="Rendering engine to use (default: auto)"
+        choices=["pyvis", "custom"],
+        default="pyvis",
+        help="Rendering engine to use (default: pyvis)"
     )
     
     parser.add_argument(
         "--format",
-        choices=["svg", "png", "pdf", "dot", "html"],
-        default="svg",
-        help="Output format (default: svg)"
+        choices=["html"],
+        default="html",
+        help="Output format (default: html)"
     )
     
     parser.add_argument(
@@ -73,7 +61,6 @@ Examples:
 
 
 def validate_args(args: argparse.Namespace) -> None:
-    """Validate command line arguments."""
     # Check if repository path exists
     if not os.path.exists(args.path):
         print(f"Error: Repository path does not exist: {args.path}", file=sys.stderr)
@@ -85,17 +72,16 @@ def validate_args(args: argparse.Namespace) -> None:
         sys.exit(1)
     
     # Format-specific validations - only warn if there's a mismatch
-    if args.format == "html" and args.engine == "graphviz":
+    if args.format == "html" and args.engine != "pyvis":
         print("Warning: HTML format requires PyVis engine, switching to 'auto'")
-        args.engine = "auto"
+        args.engine = "pyvis"
     
     if args.format in ["svg", "png", "pdf", "dot"] and args.engine == "pyvis":
         print(f"Warning: {args.format} format not supported by PyVis, switching to 'auto'")
-        args.engine = "auto"
+        args.format = "html"
 
 
 def list_engines() -> None:
-    """List available rendering engines."""
     gitviz = GitViz()
     available = gitviz.get_available_engines()
     
@@ -103,11 +89,6 @@ def list_engines() -> None:
     print()
     
     engines_info = {
-        'graphviz': {
-            'description': 'Static graph rendering (SVG, PNG, PDF, DOT)',
-            'formats': ['svg', 'png', 'pdf', 'dot'],
-            'install': 'pip install graphviz'
-        },
         'pyvis': {
             'description': 'Interactive HTML visualizations',
             'formats': ['html'],
@@ -116,7 +97,7 @@ def list_engines() -> None:
     }
     
     for engine_name, info in engines_info.items():
-        status = "✓ Available" if engine_name in available else "✗ Not installed"
+        status = "Available" if engine_name in available else "Not installed"
         print(f"  {engine_name:<10} {status}")
         print(f"             {info['description']}")
         print(f"             Formats: {', '.join(info['formats'])}")
@@ -126,7 +107,6 @@ def list_engines() -> None:
 
 
 def main() -> None:
-    """Main entry point for the CLI."""
     parser = create_parser()
     args = parser.parse_args()
     
@@ -146,9 +126,8 @@ def main() -> None:
         available_engines = gitviz.get_available_engines()
         if not available_engines:
             print("Error: No rendering engines available!", file=sys.stderr)
-            print("Install one of the following:", file=sys.stderr)
-            print("  pip install graphviz  # For static graphs", file=sys.stderr)
-            print("  pip install pyvis    # For interactive HTML", file=sys.stderr)
+            print("Install the following:", file=sys.stderr)
+            print("  pip install pyvis", file=sys.stderr)
             sys.exit(1)
         
         gitviz.visualize(

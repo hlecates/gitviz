@@ -92,5 +92,3 @@ gitviz --path /path/to/other/repo
 * **Risk Assessment**: Detect and highlight potentially problematic commits.
 
 * **Developer Pattern Recognition**: Identify coding patterns and contributor styles.
-
----

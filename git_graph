@@ -1,0 +1,9 @@
+// Git Repository Structure
+digraph {
+	dpi=300 rankdir=TB size="12,8"
+	node [fillcolor=lightblue shape=box style="rounded,filled"]
+	edge [arrowhead=vee color=gray]
+	"49e0029934912cd4c8321b44be24df9adc999157" [label="49e0029\nInitial Commit"]
+	de7cd2a4911d7779bfb41139bd2c0ea80f91315e [label="de7cd2a\nInitial Commit"]
+	de7cd2a4911d7779bfb41139bd2c0ea80f91315e -> "49e0029934912cd4c8321b44be24df9adc999157"
+}

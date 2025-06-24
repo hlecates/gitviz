@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: gitviz
+Version: 1.0.0
+Summary: A lightweight Python CLI tool for visualizing Git repository structure
+Author-email: Henry LeCates <hglecates@gmail.com>
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: graphviz
+Requires-Dist: graphviz>=0.20.0; extra == "graphviz"
+Provides-Extra: pyvis
+Requires-Dist: pyvis>=0.3.0; extra == "pyvis"
+Provides-Extra: all
+Requires-Dist: graphviz>=0.20.0; extra == "all"
+Requires-Dist: pyvis>=0.3.0; extra == "all"
+
+# GitViz
+
+<p align="center">
+  <img src="docs/GitViz-Logo.png" alt="Chimera Logo" width="400"/>
+</p>

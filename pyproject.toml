@@ -1,0 +1,32 @@
+[build-system]
+requires    = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "gitviz"
+version         = "1.0.0"
+description     = "A lightweight Python CLI tool for visualizing Git repository structure"
+readme          = "README.md"
+authors         = [
+    { name = "Henry LeCates", email = "hglecates@gmail.com" }
+]
+requires-python = ">=3.8"
+dependencies    = []
+
+[project.optional-dependencies]
+graphviz = ["graphviz>=0.20.0"]
+pyvis    = ["pyvis>=0.3.0"]
+all      = ["graphviz>=0.20.0", "pyvis>=0.3.0"]
+
+[project.scripts]
+gitviz = "gitviz.cli:main"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["gitviz", "gitviz.*"]
+
+[tool.pytest.ini_options]
+minversion   = "6.0"
+addopts      = "-ra -q"
+testpaths    = ["tests"]
+python_files = ["test_*.py"]

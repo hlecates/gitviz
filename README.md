@@ -4,7 +4,7 @@
   <img src="docs/GitViz-Logo.png" alt="GitViz Logo" width="400"/>
 </p>
 
-**GitViz** is a modern, lightweight Python CLI tool that transforms Git repository commit history into interactive visualizations. GitViz generates dynamic, web-based graphs that make understanding Git workflows intuitive and visually appealing.
+**GitViz** is a Python CLI tool that transforms Git repository commit history into interactive visualizations. GitViz generates dynamic, web-based graphs that make understanding Git workflows intuitive and visually appealing.
 
 ## Quick Start
 

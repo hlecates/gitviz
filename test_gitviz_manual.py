@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Manual test script for Gitviz - run this to quickly test functionality.
-"""
-
 import os
 import sys
 import tempfile
@@ -23,7 +18,6 @@ except ImportError as e:
 
 
 def create_test_repo(repo_path):
-    """Create a test Git repository with sample commits."""
     print(f"Creating test repository at {repo_path}")
     
     os.makedirs(repo_path, exist_ok=True)
@@ -53,7 +47,10 @@ def create_test_repo(repo_path):
         ]
         
         for filepath, content, message in files_and_messages:
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            # only mkdir if there’s a non-empty directory path
+            dirpath = os.path.dirname(filepath)
+            if dirpath:
+                os.makedirs(dirpath, exist_ok=True)
             with open(filepath, "w") as f:
                 f.write(content)
             subprocess.run(["git", "add", filepath], check=True)
@@ -76,6 +73,7 @@ def create_test_repo(repo_path):
         
         # Switch back to main and create another commit
         subprocess.run(["git", "checkout", "main"], check=True)
+        os.makedirs("docs", exist_ok=True)
         with open("docs/README.md", "w") as f:
             f.write("# Documentation\n\nProject documentation.\n")
         subprocess.run(["git", "add", "docs/README.md"], check=True)
@@ -96,13 +94,13 @@ def create_test_repo(repo_path):
         subprocess.run(["git", "checkout", "main"], check=True)
         subprocess.run(["git", "merge", "hotfix/critical-fix", "--no-ff", "-m", "Merge hotfix"], check=True)
         
-        print("✓ Test repository created successfully")
+        print("Test repository created successfully")
         
     except subprocess.CalledProcessError as e:
-        print(f"✗ Error creating test repository: {e}")
+        print(f"Error creating test repository: {e}")
         return False
     except Exception as e:
-        print(f"✗ Unexpected error: {e}")
+        print(f"Unexpected error: {e}")
         return False
     finally:
         os.chdir(original_cwd)
@@ -111,7 +109,6 @@ def create_test_repo(repo_path):
 
 
 def test_core_functionality(repo_path):
-    """Test core GitViz functionality."""
     print("\n=== Testing Core Functionality ===")
     
     try:
@@ -119,7 +116,7 @@ def test_core_functionality(repo_path):
         print("Testing GitRepository...")
         repo = GitRepository(repo_path)
         commits = repo.get_commits()
-        print(f"✓ Found {len(commits)} commits")
+        print(f"Found {len(commits)} commits")
         
         if commits:
             print(f"  Latest commit: {commits[0].short_sha} - {commits[0].message}")
@@ -129,7 +126,7 @@ def test_core_functionality(repo_path):
         print("\nTesting GitViz...")
         gitviz = GitViz()
         available_engines = gitviz.get_available_engines()
-        print(f"✓ Available engines: {available_engines}")
+        print(f"Available engines: {available_engines}")
         
         if not available_engines:
             print("No rendering engines available - install pyvis")
@@ -138,19 +135,18 @@ def test_core_functionality(repo_path):
         return True
         
     except Exception as e:
-        print(f"✗ Error testing core functionality: {e}")
+        print(f"Error testing core functionality: {e}")
         return False
 
 
 def test_rendering_engines(repo_path, output_dir):
-    """Test different rendering engines and formats."""
     print("\n=== Testing Rendering Engines ===")
     
     gitviz = GitViz()
     available_engines = gitviz.get_available_engines()
     
     if not available_engines:
-        print("⚠ No rendering engines available")
+        print("No rendering engines available")
         return False
     
     success_count = 0
@@ -189,22 +185,21 @@ def test_rendering_engines(repo_path, output_dir):
                 if os.path.exists(expected_file):
                     files_created.append(expected_file)
                     size = os.path.getsize(expected_file)
-                    print(f"  ✓ Created {os.path.basename(expected_file)} ({size} bytes)")
+                    print(f"  Created {os.path.basename(expected_file)} ({size} bytes)")
             
             if files_created:
                 success_count += 1
             else:
-                print(f"  ✗ No output files found")
+                print(f"  No output files found")
                 
         except Exception as e:
-            print(f"  ✗ Error with {engine}/{format_type}: {e}")
+            print(f"  Error with {engine}/{format_type}: {e}")
     
-    print(f"\n✓ Successfully tested {success_count}/{total_tests} configurations")
+    print(f"\nSuccessfully tested {success_count}/{total_tests} configurations")
     return success_count > 0
 
 
 def test_cli_interface(repo_path, output_dir):
-    """Test CLI interface."""
     print("\n=== Testing CLI Interface ===")
     
     test_commands = [
@@ -225,14 +220,14 @@ def test_cli_interface(repo_path, output_dir):
             
             try:
                 main()
-                print(f"  ✓ {description} succeeded")
+                print(f"  {description} succeeded")
                 success_count += 1
             except SystemExit as e:
                 if e.code == 0:
-                    print(f"  ✓ {description} succeeded (clean exit)")
+                    print(f"  {description} succeeded (clean exit)")
                     success_count += 1
                 else:
-                    print(f"  ✗ {description} failed with exit code {e.code}")
+                    print(f"  {description} failed with exit code {e.code}")
             finally:
                 sys.argv = original_argv
                 
@@ -240,13 +235,12 @@ def test_cli_interface(repo_path, output_dir):
             print(f"  ✗ {description} failed: {e}")
             sys.argv = original_argv
     
-    print(f"✓ Successfully tested {success_count}/{len(test_commands)} CLI commands")
+    print(f"Successfully tested {success_count}/{len(test_commands)} CLI commands")
     return success_count > 0
 
 
 def main_test():
-    """Main test function."""
-    print("🧪 Gitviz Manual Test Suite")
+    print("Gitviz Manual Test Suite")
     print("=" * 50)
     
     # Create temporary directory for testing
@@ -261,7 +255,7 @@ def main_test():
         try:
             subprocess.run(["git", "--version"], check=True, capture_output=True)
         except (subprocess.CalledProcessError, FileNotFoundError):
-            print("✗ Git is not available. Please install Git to run tests.")
+            print("Git is not available. Please install Git to run tests.")
             return False
         
         # Create test repository
@@ -283,10 +277,9 @@ def main_test():
         
         # Summary
         print("\n" + "=" * 50)
-        print(f"🏁 Test Summary: {tests_passed}/{total_tests} test groups passed")
         
         if tests_passed == total_tests:
-            print("🎉 All tests passed! Gitviz appears to be working correctly.")
+            print("All tests passed.")
             
             # List output files
             output_files = []
@@ -295,15 +288,14 @@ def main_test():
                     output_files.append(os.path.join(root, file))
             
             if output_files:
-                print(f"\n📁 Generated {len(output_files)} output files:")
+                print(f"\n Generated {len(output_files)} output files:")
                 for file in output_files:
                     rel_path = os.path.relpath(file, output_dir)
                     size = os.path.getsize(file)
                     print(f"  - {rel_path} ({size} bytes)")
                     
-                print(f"\n💡 Tip: Check the output files in: {output_dir}")
         else:
-            print("⚠ Some tests failed. Check the output above for details.")
+            print("Some tests failed.")
         
         # Keep output directory for inspection
         if output_files:
@@ -311,7 +303,7 @@ def main_test():
             if os.path.exists(final_output_dir):
                 shutil.rmtree(final_output_dir)
             shutil.copytree(output_dir, final_output_dir)
-            print(f"\n📋 Test outputs copied to: {final_output_dir}")
+            print(f"\n Test outputs copied to: {final_output_dir}")
         
         return tests_passed == total_tests
 

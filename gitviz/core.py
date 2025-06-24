@@ -58,10 +58,10 @@ class PyVisEngine(RenderEngine):
         
         # Add nodes
         for commit in commits:
-            title = f"SHA: {commit.sha}\\nAuthor: {commit.author}\\nDate: {commit.date}\\nMessage: {commit.message}"
+            title = f"SHA: {commit.sha}\nAuthor: {commit.author}\nDate: {commit.date}\nMessage: {commit.message}"
             net.add_node(
                 commit.sha,
-                label=f"{commit.short_sha}\\n{self._truncate_message(commit.message)}",
+                label=f"{self._truncate_message(commit.message)}",
                 title=title,
                 color="#97C2FC"
             )

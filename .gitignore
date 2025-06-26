@@ -1,0 +1,13 @@
+# Byte-compiled Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging / distribution metadata
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/

@@ -159,3 +159,36 @@ pytest tests/test_engines.py -v
 ````bash
 pip install gitviz[dev]
 ````
+
+## Development
+
+### Project Structure
+
+```
+gitviz/
+├── gitviz/           # Main package
+├── tests/            # Test suite
+├── docs/             # Documentation and images
+├── lib/              # External libraries
+└── .gitignore        # Git ignore rules
+```
+
+### Git Ignore Rules
+
+The `.gitignore` file is configured to ignore:
+
+- **Python artifacts**: `__pycache__/`, `*.pyc`, `*.egg-info/`
+- **Virtual environments**: `.venv/`, `venv/`, `env/`
+- **IDE files**: `.vscode/`, `.idea/`, `*.swp`
+- **Test outputs**: `test_output_*`, `cli_test_*`, `*.html`, `*.png`, `*.txt`
+- **System files**: `.DS_Store`, `Thumbs.db`
+- **Documentation images are preserved**: `docs/*.png` are tracked
+
+### Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite: `python run_tests.py`
+6. Submit a pull request

@@ -16,7 +16,9 @@ dependencies    = []
 [project.optional-dependencies]
 graphviz = ["graphviz>=0.20.0"]
 pyvis    = ["pyvis>=0.3.0"]
-all      = ["graphviz>=0.20.0", "pyvis>=0.3.0"]
+matplotlib = ["matplotlib>=3.5.0", "networkx>=2.8.0"]
+all      = ["graphviz>=0.20.0", "pyvis>=0.3.0", "matplotlib>=3.5.0", "networkx>=2.8.0"]
+dev      = ["pytest>=6.0.0", "pytest-cov>=2.0.0"]
 
 [project.scripts]
 gitviz = "gitviz.cli:main"

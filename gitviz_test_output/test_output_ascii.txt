@@ -1,0 +1,46 @@
+Git Repository Visualization (ASCII)
+==================================================
+
+├── bb7e28d Documentation: Added README
+    Author: Henry LeCates
+    Date: 2025-06-24 11:26:14 -0400
+
+  ├── d87b4c3 Documentation: Added README
+      Author: Henry LeCates
+      Date: 2025-06-24 13:20:41 -0400
+
+  ├── 8288ced Docs(gitignore): Configured correct g...
+      Author: Henry LeCates
+      Date: 2025-06-26 11:28:41 -0400
+
+  ├── 39c257b Delete .venv directory
+      Author: Henry LeCates
+      Date: 2025-06-26 11:29:16 -0400
+
+  ├── 6d3d4c9 Delete gitviz.egg-info directory
+      Author: Henry LeCates
+      Date: 2025-06-26 11:29:42 -0400
+
+  ├── 689b1c3 Delete gitviz/__pycache__ directory
+      Author: Henry LeCates
+      Date: 2025-06-26 11:30:15 -0400
+
+  ├── 457fa2b Docs(gitignore): Configured correct g...
+      Author: Henry LeCates
+      Date: 2025-06-26 11:30:32 -0400
+
+  ├── 857815e Merge branch 'main' of https://github...
+      Author: Henry LeCates
+      Date: 2025-06-26 11:32:18 -0400
+
+  ├── 1c1661a Docs(gitignore): Corrected gitignore
+      Author: Henry LeCates
+      Date: 2025-06-26 11:39:19 -0400
+
+  └── 0919a15 Refactor(git_graph.html): Delete file
+      Author: Henry LeCates
+      Date: 2025-06-26 11:40:26 -0400
+
+==================================================
+Total commits: 10
+Date range: 2025-06-26 11:40:26 -0400 to 2025-06-24 11:26:14 -0400

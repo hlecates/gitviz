@@ -20,14 +20,14 @@ def create_parser() -> argparse.ArgumentParser:
     
     parser.add_argument(
         "--engine",
-        choices=["pyvis", "custom"],
-        default="pyvis",
-        help="Rendering engine to use (default: pyvis)"
+        choices=["pyvis", "matplotlib", "ascii", "auto"],
+        default="auto",
+        help="Rendering engine to use (default: auto)"
     )
     
     parser.add_argument(
         "--format",
-        choices=["html"],
+        choices=["html", "png", "svg", "pdf", "jpg", "jpeg", "txt", "ascii"],
         default="html",
         help="Output format (default: html)"
     )
@@ -71,14 +71,29 @@ def validate_args(args: argparse.Namespace) -> None:
         print("Error: --max-commits must be a positive integer", file=sys.stderr)
         sys.exit(1)
     
-    # Format-specific validations - only warn if there's a mismatch
+    # Auto-select engine based on format if needed
+    if args.engine == "auto":
+        if args.format in ["html"]:
+            args.engine = "pyvis"
+        elif args.format in ["png", "svg", "pdf", "jpg", "jpeg"]:
+            args.engine = "matplotlib"
+        elif args.format in ["txt", "ascii"]:
+            args.engine = "ascii"
+        else:
+            args.engine = "pyvis"  # fallback
+    
+    # Format-specific validations
     if args.format == "html" and args.engine != "pyvis":
-        print("Warning: HTML format requires PyVis engine, switching to 'auto'")
+        print("Warning: HTML format requires PyVis engine, switching to 'pyvis'")
         args.engine = "pyvis"
     
-    if args.format in ["svg", "png", "pdf", "dot"] and args.engine == "pyvis":
-        print(f"Warning: {args.format} format not supported by PyVis, switching to 'auto'")
-        args.format = "html"
+    if args.format in ["png", "svg", "pdf", "jpg", "jpeg"] and args.engine not in ["matplotlib"]:
+        print(f"Warning: {args.format} format requires matplotlib engine, switching to 'matplotlib'")
+        args.engine = "matplotlib"
+    
+    if args.format in ["txt", "ascii"] and args.engine not in ["ascii"]:
+        print(f"Warning: {args.format} format requires ascii engine, switching to 'ascii'")
+        args.engine = "ascii"
 
 
 def list_engines() -> None:
@@ -93,12 +108,22 @@ def list_engines() -> None:
             'description': 'Interactive HTML visualizations',
             'formats': ['html'],
             'install': 'pip install pyvis'
+        },
+        'matplotlib': {
+            'description': 'Static high-quality plots for publications',
+            'formats': ['png', 'svg', 'pdf', 'jpg', 'jpeg'],
+            'install': 'pip install matplotlib networkx'
+        },
+        'ascii': {
+            'description': 'Terminal-based text visualizations',
+            'formats': ['txt', 'ascii'],
+            'install': 'No dependencies required'
         }
     }
     
     for engine_name, info in engines_info.items():
         status = "Available" if engine_name in available else "Not installed"
-        print(f"  {engine_name:<10} {status}")
+        print(f"  {engine_name:<12} {status}")
         print(f"             {info['description']}")
         print(f"             Formats: {', '.join(info['formats'])}")
         if engine_name not in available:

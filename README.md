@@ -24,6 +24,18 @@ cd gitviz
 pip install -e .
 ````
 
+#### Optional Dependencies
+
+For additional rendering engines:
+
+````bash
+# For matplotlib static plots
+pip install gitviz[matplotlib]
+
+# For all engines
+pip install gitviz[all]
+````
+
 ## Basic Usage
 
 - **Generate visualization of current repository**
@@ -48,6 +60,38 @@ gitviz --max-commits 50
 gitviz --path /path/to/other/repo
 ````
 
+- **Use different rendering engines**
+
+````bash
+# Interactive HTML visualization (default)
+gitviz --engine pyvis --format html
+
+# Static high-quality plot
+gitviz --engine matplotlib --format png
+
+# Terminal-based ASCII visualization
+gitviz --engine ascii --format txt
+````
+
+- **Auto-select engine based on format**
+
+````bash
+# Automatically uses matplotlib for PNG
+gitviz --format png
+
+# Automatically uses ascii for text
+gitviz --format txt
+
+# Automatically uses pyvis for HTML
+gitviz --format html
+````
+
+- **List available engines**
+
+````bash
+gitviz --list-engines
+````
+
 ## Example Outputs
 
 <p align="center">
@@ -63,9 +107,8 @@ gitviz --path /path/to/other/repo
 
 ### Additional Visualization Engines
 
-* **Matplotlib Backend**: Static, high-quality plots suitable for publications.
 * **WebGL Engine**: High-performance rendering for large repositories.
-* **ASCII Art Engine**: Terminal-based visualizations for headless environments.
+* **Graphviz Integration**: More sophisticated graph layouts and styling.
 
 ### ML Integration
 
@@ -92,3 +135,27 @@ gitviz --path /path/to/other/repo
 * **Risk Assessment**: Detect and highlight potentially problematic commits.
 
 * **Developer Pattern Recognition**: Identify coding patterns and contributor styles.
+
+## Testing
+
+### Run All Tests
+
+````bash
+python run_tests.py
+````
+
+### Run Specific Tests
+
+````bash
+# Integration tests
+python tests/test_integration.py
+
+# Unit tests (requires pytest)
+pytest tests/test_engines.py -v
+````
+
+### Install Test Dependencies
+
+````bash
+pip install gitviz[dev]
+````

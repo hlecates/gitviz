@@ -170,19 +170,8 @@ gitviz/
 ├── tests/            # Test suite
 ├── docs/             # Documentation and images
 ├── lib/              # External libraries
-└── .gitignore        # Git ignore rules
 ```
 
-### Git Ignore Rules
-
-The `.gitignore` file is configured to ignore:
-
-- **Python artifacts**: `__pycache__/`, `*.pyc`, `*.egg-info/`
-- **Virtual environments**: `.venv/`, `venv/`, `env/`
-- **IDE files**: `.vscode/`, `.idea/`, `*.swp`
-- **Test outputs**: `test_output_*`, `cli_test_*`, `*.html`, `*.png`, `*.txt`
-- **System files**: `.DS_Store`, `Thumbs.db`
-- **Documentation images are preserved**: `docs/*.png` are tracked
 
 ### Contributing
 
